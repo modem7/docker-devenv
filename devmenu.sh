@@ -13,12 +13,11 @@ do
   isinstalled=$(which $pkg > /dev/null 2>&1)
     if [ $? -eq 0 ];
      then
-       printf "$titlecase is installed"
+       printf "$titlecase is installed\n"
      else
        printf "\n$titlecase is not installed...Exiting Script\n"
        exit
     fi
-echo ""
 done
 
 PS3='Choose Option: '
@@ -26,10 +25,8 @@ dev_list=$(curl -ks https://api.github.com/repos/$gituser/$gitrepo/contents/$git
 dev_list+=" Prune"
 dev_list+=" Quit"
 echo -e "\nSelect which Dev environment you want:\n"
-echo ""
 select dev_name in ${dev_list}; do
-echo -e "\nYou've selected ${dev_name}"
-echo ""
+echo -e "\nYou've selected ${dev_name}\n"
 lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
     case $dev_name in
       "$dev_name")
