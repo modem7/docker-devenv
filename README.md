@@ -5,6 +5,7 @@
 # Requirements
 - Docker
 - Wget or Curl
+- JQ
 
 ---
 
