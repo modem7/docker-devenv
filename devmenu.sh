@@ -10,7 +10,7 @@ tc() { set ${*,,} ; echo ${*^} ; }
 for pkg in "${pkg_list[@]}"
 do
   titlecase=$(tc $pkg)
-  isinstalled=$(which $pkg > /dev/null 2>&1)
+  isinstalled=$(dpkg-query -l $pkg > /dev/null 2>&1)
     if [ $? -eq 0 ];
      then
        printf "$titlecase is installed\n"
