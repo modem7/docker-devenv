@@ -27,4 +27,4 @@ Choose the appropriate option to generate your dev environment.
 ---
 
 # Screenshot
-![image](https://user-images.githubusercontent.com/4349962/198712114-093aeb76-883c-4001-b039-1c2433d3acd6.png)
+![image](https://user-images.githubusercontent.com/4349962/198734168-c2357a53-44de-4011-8132-27ce69486231.png)
