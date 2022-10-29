@@ -1,0 +1,8 @@
+#apt-get -y install --no-install-recommends
+
+tzdata
+curl
+nano
+git
+wget
+bash-completion

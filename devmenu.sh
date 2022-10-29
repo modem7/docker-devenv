@@ -52,9 +52,9 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
     eval "case \"$dev_name\" in
       "$dev_list_array_pipe")
           echo "Creating $dev_name Environment"
-          DOCKER_BUILDKIT=1 docker build -t $lowerdev:dev https://github.com/$gituser/$gitrepo.git -f /Environments/$dev_name/Dockerfile \
+          docker buildx build --rm=true --build-arg BUILDKIT_INLINE_CACHE=1 -t $lowerdev:dev https://github.com/$gituser/$gitrepo.git#:$gitfolder/$dev_name -o type=image \
           && clear \
-          && echo "=========================================" \
+          && echo "===================v======================" \
           && echo "Activating $dev_name Dev Environment..." \
           && echo "Press CTRL + D or type exit to leave the container" \
           && docker run --rm -it --name "$dev_name"Dev --hostname "$dev_name"Dev "$lowerdev:dev"

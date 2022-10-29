@@ -11,6 +11,8 @@ ENV TZ="Europe/London"
 
 SHELL ["/bin/bash", "-c"]
 
+COPY requirements.txt /requirements.txt
+
 # Setup Apt-Cacher-NG if it exists
 RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
@@ -32,6 +34,24 @@ APTEOF
     fi
 EOF
 
+# # Install Environment
+# RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
+    # --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
+    # <<EOF
+    # set -xe
+    # rm -fv /etc/apt/apt.conf.d/docker-clean
+    # echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+    # echo "$TZ" > /etc/timezone
+    # apt-get -y install --no-install-recommends \
+               # tzdata \
+               # curl \
+               # nano \
+               # git \
+               # wget \
+               # netcat \
+               # bash-completion
+# EOF
+
 # Install Environment
 RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
@@ -40,14 +60,7 @@ RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
     rm -fv /etc/apt/apt.conf.d/docker-clean
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
     echo "$TZ" > /etc/timezone
-    apt-get -y install --no-install-recommends \
-               tzdata \
-               curl \
-               nano \
-               git \
-               wget \
-               netcat \
-               bash-completion
+    sed 's/#.*//' /requirements.txt | xargs apt-get -y install --no-install-recommends
 EOF
 
 # Set Bash environment
