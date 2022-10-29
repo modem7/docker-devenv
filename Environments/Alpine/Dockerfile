@@ -6,8 +6,10 @@ LABEL maintainer="modem7"
 COPY requirements.txt /requirements.txt
 
 # Install Environment
-RUN <<EOF
+RUN --mount=type=cache,id=apk,sharing=locked,target=/var/cache/apk \
+    <<EOF
     set -xe
+    ln -vs /var/cache/apk /etc/apk/cache
     echo -e "Installing Packages..."
     sed 's/#.*//' /requirements.txt | xargs apk add --update
 EOF
