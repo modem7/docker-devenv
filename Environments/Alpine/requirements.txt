@@ -1,9 +1,16 @@
 #Packages to install
 
 # Standard Packages
+bash
 bash-completion
 curl
+docker-bash-completion
 git
+htop
+iftop
 nano
+openssl
+sudo
 tzdata
+unzip
 wget

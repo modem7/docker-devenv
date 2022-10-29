@@ -34,24 +34,6 @@ APTEOF
     fi
 EOF
 
-# # Install Environment
-# RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
-    # --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
-    # <<EOF
-    # set -xe
-    # rm -fv /etc/apt/apt.conf.d/docker-clean
-    # echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-    # echo "$TZ" > /etc/timezone
-    # apt-get -y install --no-install-recommends \
-               # tzdata \
-               # curl \
-               # nano \
-               # git \
-               # wget \
-               # netcat \
-               # bash-completion
-# EOF
-
 # Install Environment
 RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \

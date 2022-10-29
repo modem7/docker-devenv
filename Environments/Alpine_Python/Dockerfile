@@ -3,45 +3,13 @@
 FROM python:alpine3.16
 LABEL maintainer="modem7"
 
+COPY requirements.txt /requirements.txt
+
 # Install Environment
 RUN <<EOF
     set -xe
     echo -e "Installing Packages..."
-    apk add --update \
-        acl-dev \
-        alpine-sdk \
-        attr-dev \
-        bash \
-        bash-completion \
-        bzip2-dev \
-        curl \
-        docker-bash-completion \
-        fuse-dev \
-        git \
-        htop \
-        iftop \
-        libffi-dev \
-        linux-headers \
-        lz4-dev \
-        nano \
-        ncurses-dev \
-        openssl \
-        openssl-dev \
-        py3-pip \
-        py3-pkgconfig \
-        py3-setuptools \
-        py3-wheel \
-        py3-xxhash \
-        python3-dev \
-        readline-dev \
-        sqlite-dev \
-        sudo \
-        tree \
-        tzdata \
-        unzip \
-        wget \
-        xz-dev \
-        zlib-dev
+    sed 's/#.*//' /requirements.txt | xargs apk add --update
 EOF
 
 # Set Bash environment

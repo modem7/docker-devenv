@@ -1,0 +1,39 @@
+#Packages to install
+
+# Standard Packages
+bash
+bash-completion
+curl
+docker-bash-completion
+git
+htop
+iftop
+nano
+openssl
+sudo
+tzdata
+unzip
+wget
+
+# Dev Packages
+acl-dev
+alpine-sdk
+attr-dev
+bzip2-dev
+fuse-dev
+libffi-dev
+linux-headers
+lz4-dev
+ncurses-dev
+openssl-dev
+py3-pip
+py3-pkgconfig
+py3-setuptools
+py3-wheel
+py3-xxhash
+python3-dev
+readline-dev
+sqlite-dev
+tree
+xz-dev
+zlib-dev

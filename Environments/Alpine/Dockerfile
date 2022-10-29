@@ -3,24 +3,13 @@
 FROM alpine:edge
 LABEL maintainer="modem7"
 
+COPY requirements.txt /requirements.txt
+
 # Install Environment
 RUN <<EOF
     set -xe
     echo -e "Installing Packages..."
-    apk add --no-cache \
-        tzdata \
-        curl \
-        wget \
-        git \
-        bash \
-        openssl \
-        unzip \
-        sudo \
-        docker-bash-completion \
-        htop \
-        iftop \
-        nano \
-        bash-completion
+    sed 's/#.*//' /requirements.txt | xargs apk add --update
 EOF
 
 # Set Bash environment
