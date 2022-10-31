@@ -8,6 +8,7 @@ docker-bash-completion
 git
 htop
 iftop
+jq
 nano
 openssl
 sudo

@@ -4,6 +4,7 @@
 bash-completion
 curl
 git
+jq
 nano
 tzdata
 wget
