@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Variables
 gituser="modem7"
 gitrepo="docker-devenv"
@@ -63,8 +65,7 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
       "Prune")
           echo "Clearing Docker cache."
           docker system prune -af
-          # break
-          exec $0
+          break
           ;;
       "Quit")
           echo "Exiting script"
