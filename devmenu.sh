@@ -63,11 +63,12 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
       "Prune")
           echo "Clearing Docker cache."
           docker system prune -af
-          break
+          # break
+          exec $0
           ;;
       "Quit")
           echo "Exiting script"
-          exit 0
+          break
           ;;
        *) echo "invalid option $REPLY";;
     esac"
