@@ -60,7 +60,7 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
           && echo "=========================================" \
           && echo "Activating $dev_name Dev Environment..." \
           && echo "Press CTRL + D or type exit to leave the container" \
-          && docker run --rm -it --name "$dev_name"Dev --hostname "$dev_name"Dev "$lowerdev:dev"
+          && docker run --rm -it --name "$dev_name"Dev"$RANDOM" --hostname "$dev_name"Dev"$RANDOM" "$lowerdev:dev"
           break
           ;;
       "Prune")
@@ -72,7 +72,9 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
           echo "Exiting script"
           exit
           ;;
-       *) echo "invalid option $REPLY";;
+       *)
+          echo "invalid option $REPLY"
+          ;;
     esac"
 done
 
