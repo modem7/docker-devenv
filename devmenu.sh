@@ -35,11 +35,12 @@ done
 echo "========================================="
 
 cat << "EOF" 
-    ____             __            
-   / __ \____  _____/ /_____  ____
-  / / / / __ \/ ___/ //_/ _ \/ __/
- / /_/ / /_/ / /__/ ,< /  __/ /    
-/_____/\____/\___/_/|_|\___/_/   
+      ____             _             
+     |  _ \  ___   ___| | _____ _ __ 
+     | | | |/ _ \ / __| |/ / _ | '__|
+     | |_| | (_) | (__|   |  __| |   
+     |____/ \___/ \___|_|\_\___|_|   
+=========================================
 EOF
 
 PS3="Choose Option: "
@@ -65,11 +66,11 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
       "Prune")
           echo "Clearing Docker cache."
           docker system prune -af
-          break
+          exec bash $0
           ;;
       "Quit")
           echo "Exiting script"
-          break
+          exit
           ;;
        *) echo "invalid option $REPLY";;
     esac"
