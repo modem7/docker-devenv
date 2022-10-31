@@ -11,7 +11,7 @@ ENV TZ="Europe/London"
 
 SHELL ["/bin/bash", "-c"]
 
-COPY requirements.txt /requirements.txt
+COPY --link requirements.txt /requirements.txt
 
 # Setup Apt-Cacher-NG if it exists
 RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \

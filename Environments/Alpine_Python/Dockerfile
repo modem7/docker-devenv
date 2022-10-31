@@ -3,7 +3,7 @@
 FROM python:alpine3.16
 LABEL maintainer="modem7"
 
-COPY requirements.txt /requirements.txt
+COPY --link requirements.txt /requirements.txt
 
 # Install Environment
 RUN --mount=type=cache,id=apk,sharing=locked,target=/var/cache/apk \
