@@ -6,6 +6,7 @@ set -euo pipefail
 gituser="modem7"
 gitrepo="docker-devenv"
 gitfolder="Environments"
+buildername="DockerDevBuilder"
 
 # Colours
 RED="\e[31m"
@@ -54,7 +55,16 @@ echo -e "\nYou've selected ${GREEN}${dev_name}${END}\n"
 lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
     eval "case \"$dev_name\" in
       "$dev_list_array_pipe")
-          echo "Creating $dev_name Environment"
+          echo "Creating buildx builder..."
+          if docker buildx create --use --name "$buildername" > /dev/null 2>&1; then
+              echo ""
+              echo "Builder $buildername created"
+            else
+              echo "Builder already created, using $buildername"
+              docker buildx use "DockerDevBuilder"
+              echo ""
+          fi
+          echo "Creating $dev_name Environment..."
           docker buildx build --rm=true --build-arg BUILDKIT_INLINE_CACHE=1 --load -t $lowerdev:dev https://github.com/$gituser/$gitrepo.git#:$gitfolder/$dev_name \
           && clear \
           && echo "=========================================" \
@@ -64,8 +74,10 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
           break
           ;;
       "Prune")
-          echo "Clearing Docker cache."
+          echo "Clearing Docker cache..."
           docker system prune -af
+          echo "Removing Docker buildx builder..."
+          docker buildx rm
           exec bash $0
           ;;
       "Quit")
