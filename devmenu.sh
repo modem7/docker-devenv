@@ -76,8 +76,15 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
       "Prune")
           echo "Clearing Docker cache..."
           docker system prune -af
+          echo ""
           echo "Removing Docker buildx builder..."
-          docker buildx rm
+          if docker buildx rm "$buildername" > /dev/null 2>&1; then
+              echo ""
+              echo "Builder $buildername removed"
+            else
+              echo "Builder already removed, no action performed"
+              echo ""
+          fi          
           exec bash $0
           ;;
       "Quit")
