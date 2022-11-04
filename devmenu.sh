@@ -62,7 +62,7 @@ for ((i=1; i<${#dev_list[@]}; i++)); do
 done
 echo -e "\nSelect an option:\n"
 select dev_name in "${dev_list[@]}" "Prune" "Quit"; do
-echo -e "\nYou've selected ${GREEN}${dev_name}${END}\n"
+echo -e "\nYou've selected: ${GREEN}${dev_name}${END}\n"
 lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
     case $dev_name in
       +($dev_env_options))
@@ -78,8 +78,8 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
           clear
           echo "========================================="
           echo "Activating $dev_name Dev Environment..."
-          echo "Press CTRL + D or type exit to leave the container"
-          docker run --rm -it --name "$dev_name"Dev"$RANDOM" --hostname "$dev_name"Dev"$RANDOM" "$lowerdev:dev" & dockerrun_pid=$!
+          echo "Press CTRL + D or type exit to leave the container."
+          docker run --rm -it --name "$dev_name"Dev"$RANDOM" --hostname "$dev_name"Dev"$RANDOM" "$lowerdev:dev"
           break
           ;;
       "Prune")
@@ -87,19 +87,22 @@ lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
           docker system prune -af
           echo -e "\nRemoving Docker buildx builder..."
           if docker buildx rm "$buildername" > /dev/null 2>&1; then
-              echo -e "\nBuilder $buildername removed"
+              echo -e "\nBuilder $buildername removed. \nGoing back to choice select...\n"
             else
-              echo -e "Builder already removed, no action performed\n"
+              echo -e "\nBuilder already removed, no action performed. \nGoing back to choice select...\n"
           fi
-          exec bash $0
+          echo "========================================="
+          REPLY=
           ;;
       "Quit")
           echo "Exiting script..."
           break
           ;;
        *)
-          echo "Invalid option $REPLY"
-          exec bash $0
+          echo "========================================="
+          echo -e "${RED}Invalid option:${END} \"$REPLY\". Try again."
+          echo -e "=========================================\n"
+          REPLY=
           ;;
     esac
 done
