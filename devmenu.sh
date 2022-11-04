@@ -10,33 +10,73 @@ gitfolder="Environments"
 buildername="DockerDevBuilder"
 
 # Colours
-RED="\e[31m"
-GREEN="\e[32m"
-END="\e[0m"
+BLACK=$(tput setaf 0)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+LIME_YELLOW=$(tput setaf 190)
+POWDER_BLUE=$(tput setaf 153)
+BLUE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+CYAN=$(tput setaf 6)
+WHITE=$(tput setaf 7)
+BRIGHT=$(tput bold)
+NORMAL=$(tput sgr0)
+BLINK=$(tput blink)
+REVERSE=$(tput smso)
+UNDERLINE=$(tput smul)
 
-echo "========================================="
-printf "        Checking Dependencies\n"
-echo "========================================="
-printf "Checking if dependencies are installed...\n"
-pkg_list=(docker jq)
-tc() { set ${*,,} ; echo ${*^} ; }
+# Functions
+pfnorm() {
+    printf '\n%s' "$1"
+}
+
+pf() {
+    printf '%s' "$1"
+}
+
+pfspc() {
+    printf '%s\n' "$1"
+}
+
+pfnl() {
+    printf '\n%s\n' "$1"
+}
+
+pfindent() {
+    printf '\n%29s\n' "$1"
+}
+
+ctrl_c () {
+    pfnl "User pressed Ctrl + C. Exiting script..."
+    exit 1
+}
+
+tc() {
+    set ${*,,} ; echo ${*^} ;
+}
+
+pfnorm "========================================="
+pfindent "Checking Dependencies"
+pfnorm "========================================="
+pfnorm "Checking if dependencies are installed..."
+pkg_list=(docker-ce jq)
 for pkg in "${pkg_list[@]}"
 do
   titlecase=$(tc $pkg)
-  isinstalled=$(dpkg-query -l $pkg > /dev/null 2>&1)
-    if [ $? -eq 0 ];
+    if dpkg-query -l $pkg > /dev/null 2>&1;
      then
-       printf "~ $titlecase is...${GREEN}installed${END}\n"
+       pfnorm "~ $titlecase is...${GREEN}installed${NORMAL}"
      else
-       printf "~ $titlecase is...${RED}not installed${END}\n"
-       printf "Exiting Script. Install $pkg.\n"
-       echo "========================================="
+       pfnorm "~ $titlecase is...${RED}not installed${NORMAL}"
+       pfnorm "Exiting Script. ${UNDERLINE}Install $pkg.${NORMAL}"
+       pfnorm "========================================="
        exit
     fi
 done
-echo "========================================="
+pfnl "========================================="
 
-cat << "EOF" 
+cat << "EOF"
       ____             _             
      |  _ \  ___   ___| | _____ _ __ 
      | | | |/ _ \ / __| |/ / _ | `__|
@@ -44,12 +84,6 @@ cat << "EOF"
      |____/ \___/ \___|_|\_\___|_|   
 =========================================
 EOF
-
-
-ctrl_c () {
-    echo -e "\nUser pressed Ctrl + C. Exiting script...\n"
-    exit 1
-}
 
 # Trap CTRL+C
 trap ctrl_c INT
@@ -60,48 +94,50 @@ dev_env_options=${dev_list[0]};
 for ((i=1; i<${#dev_list[@]}; i++)); do
         dev_env_options="$dev_env_options|${dev_list[i]}"
 done
-echo -e "\nSelect an option:\n"
+pfnl "Select an option:"
 select dev_name in "${dev_list[@]}" "Prune" "Quit"; do
-echo -e "\nYou've selected: ${GREEN}${dev_name}${END}\n"
+pfnl "You've selected: ${GREEN}${dev_name}${NORMAL}"
 lowerdev=$(echo $dev_name | tr '[:upper:]' '[:lower:]')
     case $dev_name in
       +($dev_env_options))
-          echo "Creating buildx builder..."
+          pfnorm "Creating buildx builder..."
           if docker buildx create --use --name "$buildername" > /dev/null 2>&1; then
-              echo -e "\nBuilder $buildername created..."
+              pfnl "Builder $buildername created..."
             else
-              echo -e "Builder already created, using "$buildername"...\n"
+              pfnl "Builder already created, using ${buildername}..."
               docker buildx use "$buildername"
           fi
-          echo "Creating $dev_name Environment..."
+          pfnorm "Creating $dev_name Environment..."
           docker buildx build --rm=true --build-arg BUILDKIT_INLINE_CACHE=1 --load -t $lowerdev:dev https://github.com/$gituser/$gitrepo.git#:$gitfolder/$dev_name
           clear
-          echo "========================================="
-          echo "Activating $dev_name Dev Environment..."
-          echo "Press CTRL + D or type exit to leave the container."
+          pf "========================================="
+          pfnorm "Activating $dev_name Dev Environment..."
+          pfnl "Press CTRL + D or type exit to leave the container."
           docker run --rm -it --name "$dev_name"Dev"$RANDOM" --hostname "$dev_name"Dev"$RANDOM" "$lowerdev:dev"
           break
           ;;
       "Prune")
-          echo "Clearing Docker cache..."
+          pfnorm "Clearing Docker cache..."
           docker system prune -af
-          echo -e "\nRemoving Docker buildx builder..."
+          pfnl  "Removing Docker buildx builder..."
           if docker buildx rm "$buildername" > /dev/null 2>&1; then
-              echo -e "\nBuilder $buildername removed. \nGoing back to choice select...\n"
+              pfnl "Builder $buildername removed."
+              pfnl "Going back to choice select..."
             else
-              echo -e "\nBuilder already removed, no action performed. \nGoing back to choice select...\n"
+              pfnl "Builder already removed, no action performed."
+              pfnl "Going back to choice select..."
           fi
-          echo "========================================="
+          pfnorm "========================================="
           REPLY=
           ;;
       "Quit")
-          echo "Exiting script..."
+          pfnl "Exiting script..."
           break
           ;;
        *)
-          echo "========================================="
-          echo -e "${RED}Invalid option:${END} \"$REPLY\". Try again."
-          echo -e "=========================================\n"
+          pfnorm "========================================="
+          pfnorm "${RED}Invalid option:${NORMAL} \"$REPLY\". Try again."
+          pfnl "========================================="
           REPLY=
           ;;
     esac
