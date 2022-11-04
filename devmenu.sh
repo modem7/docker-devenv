@@ -8,7 +8,6 @@ gituser="modem7"
 gitrepo="docker-devenv"
 gitfolder="Environments"
 buildername="DockerDevBuilder"
-failuremsg=""
 
 # Colours
 RED="\e[31m"
@@ -40,11 +39,12 @@ echo "========================================="
 cat << "EOF" 
       ____             _             
      |  _ \  ___   ___| | _____ _ __ 
-     | | | |/ _ \ / __| |/ / _ | '__|
+     | | | |/ _ \ / __| |/ / _ | `__|
      | |_| | (_) | (__|   |  __| |   
      |____/ \___/ \___|_|\_\___|_|   
 =========================================
 EOF
+
 
 ctrl_c () {
     echo -e "\nUser pressed Ctrl + C. Exiting script...\n"
