@@ -1,0 +1,42 @@
+#Packages to install
+
+# Standard Packages
+bash
+bash-completion
+curl
+coreutils
+docker-bash-completion
+git
+htop
+iftop
+jq
+nano
+openssl
+sudo
+tzdata
+unzip
+wget
+
+# Additional debug packages
+apache2-utils
+bind-tools
+busybox-extras
+ethtool
+iperf3
+iproute2
+iputils
+lftp
+mtr
+mysql-client
+net-tools
+netcat-openbsd
+nmap
+nmap-scripts
+openssh-client
+perl-net-telnet
+postgresql-client
+procps
+rsync
+socat
+tcpdump
+tshark
