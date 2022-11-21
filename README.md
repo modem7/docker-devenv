@@ -17,29 +17,21 @@ If you need a customised environment, please fork this repo, customise as you wi
 
 ---
 
-# Usage
-
-## Script Outcome:
-When you run the script, it will grab a list of available environment from the Github repo (Environments can be found [here](https://github.com/modem7/docker-devenv/tree/master/Environments)).
-
-When you choose one of the Environment options (e.g Alpine, Ubuntu etc), the script will build the Dockerfile located inside the environment folder in the repo, and then it'll run the dev container using the built image. 
-
-### High level script workflow:
-- Script downloaded
-- Dev Env option selected
-- - Build command run `DOCKER_BUILDKIT=1 docker build -t $lowerdev:dev https://github.com/$gituser/$gitrepo.git -f /Environments/$dev_name/Dockerfile`
-- - Container start command run `docker run --rm -it --name "$dev_name"Dev --hostname "$dev_name"Dev "$lowerdev:dev"`
-- Dev Container starts up ready to use
+# Environments
+- [Alpine](https://github.com/modem7/docker-devenv/blob/master/Environments/Alpine/README.md)
+- [Alpine_Network_Debug](https://github.com/modem7/docker-devenv/blob/master/Environments/Alpine_Network_Debug/README.md)
+- [Alpine_Python](https://github.com/modem7/docker-devenv/blob/master/Environments/Alpine_Python/README.md)
+- [Debian](https://github.com/modem7/docker-devenv/blob/master/Environments/Debian/README.md)
+- [Ubuntu](https://github.com/modem7/docker-devenv/blob/master/Environments/Ubuntu/README.md)
 
 ---
 
-## *WARNING*: Do not run arbitrary scripts without checking them first:
-Please have a look over the [script](https://github.com/modem7/docker-devenv/blob/master/devmenu.sh) prior to running and make sure you're comfortable with it. 
+# Usage
 
 ## Download and run script:
 In your console, run the following commands:
 
-Note: This has only been made for use in Debian based systems currently.
+Note: This has only been made for use in Debian/Ubuntu based systems currently.
 
 curl:
 ```
