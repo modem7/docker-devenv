@@ -2,6 +2,7 @@
 
 # Standard Packages
 bash-completion
+ca-certificates
 curl
 git
 jq
