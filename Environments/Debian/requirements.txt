@@ -3,6 +3,7 @@
 # Standard Packages
 bash-completion
 ca-certificates
+coreutils
 curl
 git
 jq
