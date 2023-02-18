@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1
 
-FROM python:alpine3.16
+FROM python:alpine3.17
 LABEL maintainer="modem7"
 
 COPY --link requirements.txt /requirements.txt
