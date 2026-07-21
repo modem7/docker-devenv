@@ -1,6 +1,6 @@
-# syntax = docker/dockerfile:1
+# syntax = docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
 
-FROM python:alpine3.17
+FROM python:alpine3.17@sha256:fc34b07ec97a4f288bc17083d288374a803dd59800399c76b977016c9fe5b8f2
 LABEL maintainer="modem7"
 
 COPY --link requirements.txt /requirements.txt
