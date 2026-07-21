@@ -1,6 +1,6 @@
-# syntax = docker/dockerfile:1
+# syntax = docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
 
-FROM debian
+FROM debian@sha256:fac46bff2e02f51425b6e33b0e1169f55dfb053d83511ca28aa50c09fd5ed7a4
 LABEL maintainer="modem7"
 
 ENV DEBIAN_FRONTEND=noninteractive
