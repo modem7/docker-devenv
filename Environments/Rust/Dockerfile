@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1
 
-FROM ubuntu
+FROM rust:bookworm
 LABEL maintainer="modem7"
 
 ENV DEBIAN_FRONTEND=noninteractive

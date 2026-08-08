@@ -1,0 +1,12 @@
+#Packages to install
+
+# Standard Packages
+bash-completion
+ca-certificates
+coreutils
+curl
+git
+jq
+nano
+tzdata
+wget
