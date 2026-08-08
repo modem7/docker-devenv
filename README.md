@@ -114,4 +114,4 @@ for `NetworkTools`) into your project, then use VS Code's
 ---
 
 # Screenshot
-![image](https://user-images.githubusercontent.com/4349962/198807913-eefcc8ae-8e20-42a3-8879-44adb4795bcf.png)
+<img width="1208" height="569" alt="image" src="https://github.com/user-attachments/assets/fc339c08-fa9a-41e4-acb8-fa7fd85f6f87" />
