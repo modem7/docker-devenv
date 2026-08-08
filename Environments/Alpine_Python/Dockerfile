@@ -3,15 +3,17 @@
 FROM python:alpine3.17
 LABEL maintainer="modem7"
 
+ARG EXTRA_PACKAGES=""
+
 COPY --link requirements.txt /requirements.txt
 
-# Install Environment
+# hadolint ignore=DL4006
 RUN --mount=type=cache,id=apk,sharing=locked,target=/var/cache/apk \
     <<EOF
     set -xe
     ln -vs /var/cache/apk /etc/apk/cache
-    echo -e "Installing Packages..."
-    sed 's/#.*//' /requirements.txt | xargs apk add --update
+    echo "Installing Packages..."
+    sed 's/#.*//' /requirements.txt | xargs apk add --update $EXTRA_PACKAGES
 EOF
 
 # Set Bash environment
@@ -29,5 +31,7 @@ FIRST
     fi
 SECOND
 EOF
+
+WORKDIR /workspace
 
 CMD [ "/bin/bash" ]
