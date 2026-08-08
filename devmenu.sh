@@ -184,12 +184,12 @@ run_container() {
         tty_args=()
     fi
     if [[ -n "${DEVMENU_CMD:-}" ]]; then
-        docker run --rm "${tty_args[@]}" -v "${workspace}:/workspace" \
+        docker run --rm "${tty_args[@]}" -v "${workspace}:/workspace" -w /workspace \
             --name "$container_name" --hostname "$container_name" \
             "$image" bash -lc "$DEVMENU_CMD"
     else
         pfnl "Press CTRL + D or type exit to leave the container."
-        docker run --rm "${tty_args[@]}" -v "${workspace}:/workspace" \
+        docker run --rm "${tty_args[@]}" -v "${workspace}:/workspace" -w /workspace \
             --name "$container_name" --hostname "$container_name" \
             "$image"
     fi
