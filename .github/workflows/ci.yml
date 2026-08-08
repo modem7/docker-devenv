@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      build_environments: ${{ steps.list.outputs.build_environments }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        run: |
+          envs=$(for d in Environments/*/; do
+            name=$(basename "$d")
+            if [ -f "${d}Dockerfile" ]; then
+              printf '%s\n' "$name"
+            fi
+          done | sort)
+          json=$(printf '%s\n' "$envs" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "build_environments=$json" >> "$GITHUB_OUTPUT"
+
+  build-test:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: ${{ fromJson(needs.discover.outputs.build_environments) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build ${{ matrix.environment }}
+        uses: docker/build-push-action@v6
+        with:
+          context: Environments/${{ matrix.environment }}
+          push: false
+          tags: docker-devenv-${{ matrix.environment }}:ci
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Environments/${{ matrix.environment }}/Dockerfile
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck devmenu.sh
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: '.'
+
+  psscriptanalyzer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run PSScriptAnalyzer on devmenu.ps1
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          # PSAvoidUsingWriteHost is intentionally excluded: devmenu.ps1 needs
+          # Write-Host for status output specifically because Write-Output
+          # would pollute the success stream that Invoke-Pull/Invoke-Build
+          # rely on staying clean (see devmenu.ps1's own comments).
+          $results = Invoke-ScriptAnalyzer -Path ./devmenu.ps1 -Severity Warning,Error -ExcludeRule PSAvoidUsingWriteHost
+          $results | Format-Table -AutoSize
+          if ($results.Count -gt 0) { exit 1 }
+
+  bats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install bats
+        run: sudo apt-get update && sudo apt-get install -y bats
+      - name: Run devmenu.sh test suite
+        run: bats tests/devmenu.bats
