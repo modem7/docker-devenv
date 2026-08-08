@@ -16,6 +16,12 @@ jobs:
         run: |
           envs=$(for d in Environments/*/; do
             name=$(basename "$d")
+            case "$name" in
+              *[!A-Za-z0-9_-]*)
+                echo "Skipping environment with unsafe name: $name" >&2
+                continue
+                ;;
+            esac
             if [ -f "${d}Dockerfile" ]; then
               printf '%s\n' "$name"
             fi
@@ -34,8 +40,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compute image slug
         id: meta
+        env:
+          ENVIRONMENT: ${{ matrix.environment }}
         run: |
-          slug=$(echo "${{ matrix.environment }}" | tr '[:upper:]' '[:lower:]' | tr '_' '-')
+          slug=$(printf '%s' "$ENVIRONMENT" | tr '[:upper:]' '[:lower:]' | tr '_' '-')
           echo "slug=$slug" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-buildx-action@v3
       - name: Build ${{ matrix.environment }}

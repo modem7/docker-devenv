@@ -24,6 +24,12 @@ jobs:
         run: |
           envs=$(for d in Environments/*/; do
             name=$(basename "$d")
+            case "$name" in
+              *[!A-Za-z0-9_-]*)
+                echo "Skipping environment with unsafe name: $name" >&2
+                continue
+                ;;
+            esac
             if [ -f "${d}Dockerfile" ]; then
               printf '%s\n' "$name"
             fi
@@ -42,8 +48,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compute image slug and short sha
         id: meta
+        env:
+          ENVIRONMENT: ${{ matrix.environment }}
         run: |
-          slug=$(echo "${{ matrix.environment }}" | tr '[:upper:]' '[:lower:]' | tr '_' '-')
+          slug=$(printf '%s' "$ENVIRONMENT" | tr '[:upper:]' '[:lower:]' | tr '_' '-')
           echo "slug=$slug" >> "$GITHUB_OUTPUT"
           echo "short_sha=${GITHUB_SHA:0:7}" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-qemu-action@v3
