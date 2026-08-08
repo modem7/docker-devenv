@@ -53,7 +53,7 @@ jobs:
           push: false
           tags: docker-devenv-${{ steps.meta.outputs.slug }}:ci
       - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.4.0
         with:
           dockerfile: Environments/${{ matrix.environment }}/Dockerfile
           # DL3006 (untagged FROM) and DL3008 (unpinned apt package versions)
