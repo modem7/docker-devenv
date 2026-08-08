@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1
 
-FROM python:alpine3.17
+FROM python:alpine
 LABEL maintainer="modem7"
 
 ARG EXTRA_PACKAGES=""
