@@ -11,7 +11,7 @@ jobs:
     outputs:
       build_environments: ${{ steps.list.outputs.build_environments }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
       - id: list
         run: |
           envs=$(for d in Environments/*/; do
@@ -37,7 +37,7 @@ jobs:
       matrix:
         environment: ${{ fromJson(needs.discover.outputs.build_environments) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
       - name: Compute image slug
         id: meta
         env:
@@ -64,7 +64,7 @@ jobs:
   shellcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
       - name: Shellcheck devmenu.sh
         uses: ludeeus/action-shellcheck@2.0.0
         with:
@@ -73,7 +73,7 @@ jobs:
   psscriptanalyzer:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
       - name: Run PSScriptAnalyzer on devmenu.ps1
         shell: pwsh
         run: |
@@ -89,7 +89,7 @@ jobs:
   bats:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.4.0
       - name: Install bats
         run: sudo apt-get update && sudo apt-get install -y bats
       - name: Run devmenu.sh test suite
