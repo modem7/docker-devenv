@@ -56,6 +56,10 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Environments/${{ matrix.environment }}/Dockerfile
+          # DL3006 (untagged FROM) and DL3008 (unpinned apt package versions)
+          # are intentional here: this tool deliberately tracks each
+          # distro's latest packages rather than pinning them.
+          ignore: DL3006,DL3008
 
   shellcheck:
     runs-on: ubuntu-latest
