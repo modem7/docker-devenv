@@ -19,7 +19,7 @@ jobs:
     outputs:
       build_environments: ${{ steps.list.outputs.build_environments }}
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
       - id: list
         run: |
           envs=$(for d in Environments/*/; do
@@ -45,7 +45,7 @@ jobs:
       matrix:
         environment: ${{ fromJson(needs.discover.outputs.build_environments) }}
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
       - name: Compute image slug and short sha
         id: meta
         env:
