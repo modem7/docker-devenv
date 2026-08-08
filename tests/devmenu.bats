@@ -5,8 +5,8 @@ setup() {
 }
 
 @test "env_slug lowercases and hyphenates underscores" {
-    result="$(env_slug "Alpine_Network_Debug")"
-    [ "$result" = "alpine-network-debug" ]
+    result="$(env_slug "Alpine_Python")"
+    [ "$result" = "alpine-python" ]
 }
 
 @test "env_slug leaves a simple name lowercase" {

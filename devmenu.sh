@@ -25,7 +25,7 @@ ctrl_c() {
     exit 1
 }
 
-# Alpine_Network_Debug -> alpine-network-debug
+# Alpine_Python -> alpine-python
 env_slug() {
     local name="$1"
     printf '%s' "${name,,}" | tr '_' '-'
