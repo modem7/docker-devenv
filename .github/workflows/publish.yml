@@ -1,0 +1,64 @@
+name: Publish Images
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'Environments/**'
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      build_environments: ${{ steps.list.outputs.build_environments }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        run: |
+          envs=$(for d in Environments/*/; do
+            name=$(basename "$d")
+            if [ -f "${d}Dockerfile" ]; then
+              printf '%s\n' "$name"
+            fi
+          done | sort)
+          json=$(printf '%s\n' "$envs" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "build_environments=$json" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: ${{ fromJson(needs.discover.outputs.build_environments) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute image slug and short sha
+        id: meta
+        run: |
+          slug=$(echo "${{ matrix.environment }}" | tr '[:upper:]' '[:lower:]' | tr '_' '-')
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${GITHUB_SHA:0:7}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push ${{ matrix.environment }}
+        uses: docker/build-push-action@v6
+        with:
+          context: Environments/${{ matrix.environment }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/docker-devenv-${{ steps.meta.outputs.slug }}:latest
+            ghcr.io/${{ github.repository_owner }}/docker-devenv-${{ steps.meta.outputs.slug }}:${{ steps.meta.outputs.short_sha }}
