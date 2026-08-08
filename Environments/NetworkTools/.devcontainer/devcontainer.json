@@ -1,0 +1,6 @@
+{
+  "name": "NetworkTools Dev Environment",
+  "image": "nicolaka/netshoot:latest",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace"
+}
